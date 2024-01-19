@@ -24,6 +24,8 @@
         android:layout_margin="10dp"
         android:hint="@string/email"
         app:startIconDrawable="@drawable/email_24"
+        app:counterEnabled="true"
+        app:counterMaxLength="50"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
@@ -38,7 +40,8 @@
         android:hint="@string/password"
         app:startIconDrawable="@drawable/lock_24"
         app:passwordToggleEnabled="true"
-        >
+        app:counterEnabled="true"
+        app:counterMaxLength="30">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:inputType="textPassword"

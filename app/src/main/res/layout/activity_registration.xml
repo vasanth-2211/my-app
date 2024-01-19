@@ -6,7 +6,8 @@
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".registrationActivity">
+    tools:context=".registrationActivity"
+    >
 
     <TextView
         android:layout_margin="28dp"
@@ -21,7 +22,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:hint="@string/email"
-        app:startIconDrawable="@drawable/email_24">
+        app:startIconDrawable="@drawable/email_24"
+        app:counterEnabled="true"
+        app:counterMaxLength="50"
+        app:helperTextEnabled="true"
+        app:helperText="example@anymail.com"
+        app:helperTextTextColor="@color/material_dynamic_neutral50"
+        >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
             android:layout_width="match_parent"
@@ -35,12 +42,17 @@
         android:hint="@string/password"
         android:layout_margin="10dp"
         app:startIconDrawable="@drawable/lock_24"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:helperTextEnabled="true"
+        app:helperText="example :Abc$@123"
+        app:helperTextTextColor="@color/material_dynamic_neutral50"
+
         >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:inputType="textPassword"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
