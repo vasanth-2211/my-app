@@ -1,5 +1,7 @@
 package com.example.my_app;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +10,8 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,8 +24,9 @@ import android.widget.Toast;
 public class home extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private EditText nameEditText, dobEditText;
-    private Button searchButton, InsertButton, DeleteButton;
+    private Button searchButton, InsertButton, DeleteButton,logoutbtn;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +38,17 @@ public class home extends AppCompatActivity {
         dobEditText = findViewById(R.id.dobEditText);
         searchButton = findViewById(R.id.searchButton);
         InsertButton = findViewById(R.id.Insert);
+        logoutbtn=findViewById(R.id.logout_btn);
 
-
+        logoutbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent=new Intent(getApplicationContext(), loginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
         searchButton.setOnClickListener(new View.OnClickListener() {

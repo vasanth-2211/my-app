@@ -6,4 +6,8 @@
     <string name="click_to_login">Click to login</string>
     <string name="click_to_register">Click to register</string>
     <string name="logout">logout</string>
+    <string name="icon">icon</string>
+    <string name="forget_password">Forget password!</string>
+    <string name="if_not_click_to_register">If Not!,@Click to Register</string>
+    <string name="new_user_create_account">New User? Create account</string>
 </resources>
