@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".registrationActivity"
-    android:background="@drawable/bg_reg">
+    android:background="@color/muted_green">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.7"
-        android:background="@color/coral_orange"/>
+        android:background="@color/muted_green"/>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:text="SIGNUP"
             android:paddingTop="10dp"
             android:textStyle="bold"
-            android:textColor="@color/coral_orange"
+            android:textColor="@color/muted_green"
             android:textSize="32sp"
             android:gravity="center"/>
         <com.google.android.material.textfield.TextInputLayout
@@ -88,9 +88,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/reg_btn"
                 android:layout_marginVertical="15dp"
-                android:text="SIGNUP"
+                android:text="sign up"
                 android:textSize="20dp"
-                android:backgroundTint="@color/coral_orange"/>
+                android:backgroundTint="@color/muted_green"/>
         </com.google.android.material.button.MaterialButtonToggleGroup>
     </LinearLayout>
     </androidx.cardview.widget.CardView>
