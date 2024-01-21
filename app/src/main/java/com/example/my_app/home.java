@@ -59,7 +59,7 @@ public class home extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                readDataFromFirebase();
+                searchDatabase();
             }
         });
         InsertButton.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +98,13 @@ public class home extends AppCompatActivity {
 
                         // Show Toast or Dialog for the matched person
                         showMatchingRecordDialog(personSnapshot);
+                        Intent intent = new Intent(home.this, dialog_table_layout.class);
+
+                        // You can also pass data to the second activity using putExtra
+                        intent.putExtra("DataSnapShot",personSnapshot.getValue().toString());
+
+                        // Start the SecondActivity
+                        startActivity(intent);
 
                         return; // Stop searching once a match is found
                     }
