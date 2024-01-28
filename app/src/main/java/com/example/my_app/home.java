@@ -5,9 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,25 +22,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.ArrayList;
-import java.util.List;
 public class home extends AppCompatActivity {
     private DatabaseReference databaseReference;
-    private EditText nameEditText, dobEditText, startYearEditText,result,endYearEditText;
-    private Button searchButton, InsertButton, DeleteButton, logoutbtn, ShowAlltheRecord;
+    private EditText nameEditText, dobEditText;
+    private Button searchButton, InsertButton, DeleteButton,logoutbtn;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -56,18 +42,14 @@ public class home extends AppCompatActivity {
         dobEditText = findViewById(R.id.dobEditText);
         searchButton = findViewById(R.id.searchButton);
         InsertButton = findViewById(R.id.Insert);
-        logoutbtn = findViewById(R.id.logout_btn);
+        logoutbtn=findViewById(R.id.logout_btn);
         DeleteButton = findViewById(R.id.Delete);
-        ShowAlltheRecord = findViewById(R.id.button);
-        startYearEditText = findViewById(R.id.startYearEditText);
-        endYearEditText = findViewById(R.id.endYearEditText);
-        result = findViewById(R.id.result);
 
         logoutbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+                Intent intent=new Intent(getApplicationContext(), loginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -77,7 +59,7 @@ public class home extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchDatabase();
+                readDataFromFirebase();
             }
         });
         InsertButton.setOnClickListener(new View.OnClickListener() {
@@ -92,14 +74,7 @@ public class home extends AppCompatActivity {
                 deleteData();
             }
         });
-        ShowAlltheRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                RangeSearch();
-            }
-        });
     }
-
     private void searchDatabase() {
         final String inputName = nameEditText.getText().toString().trim();
         final String inputDOB = dobEditText.getText().toString().trim();
@@ -119,12 +94,10 @@ public class home extends AppCompatActivity {
 
                         // Person found, print the data
                         String gender = personSnapshot.child("Gender").getValue(String.class);
-                        Intent intent = new Intent(home.this, dialog_table_layout.class);
-                        intent.putExtra("name", personName);
-                        intent.putExtra("DOB", dob);
-                        intent.putExtra("Gender", gender);
-                        startActivity(intent);
+                        Log.d("Firebase", "Name: " + personName + ", DOB: " + dob + ", Gender: " + gender);
 
+                        // Show Toast or Dialog for the matched person
+                        showMatchingRecordDialog(personSnapshot);
 
                         return; // Stop searching once a match is found
                     }
@@ -143,7 +116,6 @@ public class home extends AppCompatActivity {
             }
         });
     }
-
     private void showMatchingRecordDialog(DataSnapshot personSnapshot) {
         // Create a custom dialog using AlertDialog.Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(home.this);
@@ -262,7 +234,6 @@ public class home extends AppCompatActivity {
 
         Toast.makeText(home.this, "Data inserted successfully.", Toast.LENGTH_SHORT).show();
     }
-
     private void deleteData() {
         final String inputName = nameEditText.getText().toString().trim();
         final String inputDOB = dobEditText.getText().toString().trim();
@@ -293,7 +264,6 @@ public class home extends AppCompatActivity {
             }
         });
     }
-
     private void readDataFromFirebase() {
         // Add a ValueEventListener to the database reference
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -341,267 +311,7 @@ public class home extends AppCompatActivity {
         builder.show();
     }
 
-    private void displayRecordsInTableLayout(List<String> records) {
-        TableLayout tableLayout = findViewById(R.id.tableLayout);
-
-        for (String record : records) {
-            // Create a new row
-            TableRow tableRow = new TableRow(this);
-
-            // Create TextView for the record
-            TextView recordTextView = new TextView(this);
-            recordTextView.setText(record);
-            recordTextView.setPadding(8, 8, 8, 8);
-            recordTextView.setGravity(Gravity.CENTER);
-
-            // Add TextView to the TableRow
-            tableRow.addView(recordTextView);
-
-            // Add TableRow to the TableLayout
-            tableLayout.addView(tableRow);
-        }
-    }
-
-    private void readAllRecordsFromFirebase() {
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Check if there is any data
-                if (dataSnapshot.exists()) {
-                    // Iterate through the data
-                    List<String> records = new ArrayList<>();
-                    for (DataSnapshot personSnapshot : dataSnapshot.getChildren()) {
-                        StringBuilder record = new StringBuilder();
-                        for (DataSnapshot column : personSnapshot.getChildren()) {
-                            record.append(column.getKey()).append(": ").append(column.getValue()).append("\n");
-                        }
-                        records.add(record.toString());
-                    }
-
-                    // Display all records in TableLayout
-                    displayRecordsInTableLayout(records);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
-            }
-        });
-
-
-
-
-
-    }
-    private class Record {
-        private String name;
-        private String dob;
-        private String gender;
-
-        // Constructors, getters, and setters
-
-        // Example constructor
-        public Record(String name, String dob, String gender) {
-            this.name = name;
-            this.dob = dob;
-            this.gender = gender;
-        }
-        public String getName() {
-            return name;
-        }
-
-        public String getDob() {
-            return dob;
-        }
-
-        public String getGender() {
-            return gender;
-        }
-    }
-    public  void RangeSearch(){
-        String Date1 =startYearEditText.getText().toString();
-        String Date2 = endYearEditText.getText().toString();
-        if (Date1.length() > 4 || Date2.length() > 4 ){
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    List<Record> recordList = new ArrayList<>();
-
-                    // Iterate through the data
-                    for (DataSnapshot personSnapshot : dataSnapshot.getChildren()) {
-                        String name = personSnapshot.child("Name").getValue(String.class);
-                        String dob = personSnapshot.child("DOB").getValue(String.class);
-
-                        // Check if the DOB is within the specified date range
-                        if (isDateInRange(dob, Date1, Date2)) {
-                            String gender = personSnapshot.child("Gender").getValue(String.class);
-
-                            // Create a Record object and add it to the list
-                            Record record = new Record(name, dob, gender);
-                            recordList.add(record);
-                        }
-                    }
-
-                    // Display records in the table
-                    Intent intent = new Intent(home.this, ShowAllRecords.class);
-
-// Put the record list as an extra in the Intent
-                    intent.putExtra("recordList", (Serializable) recordList);
-
-// Start the second activity
-                    startActivity(intent);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e("Firebase", "Error reading data: " + databaseError.getMessage());
-                }
-            });
-        }
 }
-    private void displayRecordsInTable(List<Record> recordList) {
-        TableLayout tableLayout = findViewById(R.id.tableLayout);
-
-        // Add headers row
-        TableRow headersRow = new TableRow(this);
-
-        // Create TextViews for headers
-        TextView header1 = new TextView(this);
-        TextView header2 = new TextView(this);
-        TextView header3 = new TextView(this);
-
-        // Set text for headers
-        header1.setText("Name");
-        header2.setText("DOB");
-        header3.setText("Gender");
-
-        // Optionally, set layout parameters for the headers (padding, gravity, etc.)
-
-        // Add the headers TextViews to the headers row
-        headersRow.addView(header1);
-        headersRow.addView(header2);
-        headersRow.addView(header3);
-
-        // Add the headers row to the TableLayout
-        tableLayout.addView(headersRow);
-
-        // Iterate through the records
-        for (Record record : recordList) {
-            // Create a new row
-            TableRow newRow = new TableRow(this);
-
-            // Create new TextViews for each cell in the row
-            TextView cell1 = new TextView(this);
-            TextView cell2 = new TextView(this);
-            TextView cell3 = new TextView(this);
-
-            // Set text for each cell
-            cell1.setText(record.getName());
-            cell2.setText(record.getDob());
-            cell3.setText(record.getGender());
-
-            // Optionally, set layout parameters for the TextViews
-
-            // Add the TextViews to the TableRow
-            newRow.addView(cell1);
-            newRow.addView(cell2);
-            newRow.addView(cell3);
-
-            // Add the TableRow to the TableLayout
-            tableLayout.addView(newRow);
-        }
-
-    }
-
-
-
-
-
-    // Helper method to check if a date is within the specified range
-    private boolean isDateInRange(String date, String startDate, String endDate) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            Date dobDate = sdf.parse(date);
-            Date startDateRange = sdf.parse(startDate);
-            Date endDateRange = sdf.parse(endDate);
-
-            // Extract day, month, and year from the dates
-            Calendar dobCalendar = Calendar.getInstance();
-            Calendar startCalendar = Calendar.getInstance();
-            Calendar endCalendar = Calendar.getInstance();
-
-            dobCalendar.setTime(dobDate);
-            startCalendar.setTime(startDateRange);
-            endCalendar.setTime(endDateRange);
-
-            // Check if the DOB is within the specified range
-            return dobCalendar.equals(startCalendar) || dobCalendar.equals(endCalendar) ||
-                    (dobCalendar.after(startCalendar) && dobCalendar.before(endCalendar));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
 
 
 
