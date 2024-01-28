@@ -4,18 +4,21 @@
     android:layout_height="match_parent">
 
     <TableLayout
-        android:id="@+id/tableLayout"
+        android:id="@+id/tableLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="#ffffff"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:elevation="4dp"
         android:padding="8dp"
         android:stretchColumns="*">
 
         <!-- Headers -->
         <TableRow
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:background="#E0E0E0">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,16 +42,30 @@
                 android:gravity="center"
                 android:textStyle="bold"/>
         </TableRow>
-    </TableLayout>-
+    </TableLayout>
 
     <Button
-        android:id="@+id/closeButton"
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Go Back"
-        android:layout_below="@id/tableLayout"
+        android:layout_below="@id/tableLayout1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="222dp"
+        android:layout_marginEnd="181dp"
+        android:layout_marginBottom="490dp"
+        android:text="TextView" />
 
 
 </RelativeLayout>
